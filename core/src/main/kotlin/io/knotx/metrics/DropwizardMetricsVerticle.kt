@@ -38,7 +38,7 @@ class DropwizardMetricsVerticle() : AbstractVerticle() {
     }
 
     override fun start(startFuture: Future<Void>) {
-        LOGGER.info("Starting <{}>", this::class.java.simpleName)
+        LOGGER.info("Starting <${this::class.java.simpleName}>")
 
         val registryName: String? = System.getProperty(REGISTRY_PROPERTY)
         if (registryName == null) {
@@ -48,7 +48,7 @@ class DropwizardMetricsVerticle() : AbstractVerticle() {
         val dropwizardRegistry = SharedMetricRegistries.getOrCreate(registryName ?: DEFAULLT_REGISTRY_NAME)
 
         val factory = ServiceLoader.load(DropwizardMetricsReporterFactory::class.java)
-                .firstOrNull { f -> options.reporter.name == f?.getName() }
+                .firstOrNull { f -> options.reporter.name == f?.name }
 
         if (factory != null) {
             reporter = factory.create(dropwizardRegistry, options.reporter.config)

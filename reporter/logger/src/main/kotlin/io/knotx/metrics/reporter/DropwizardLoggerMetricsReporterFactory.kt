@@ -23,34 +23,27 @@ import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
 
 class DropwizardLoggerMetricsReporterFactory : DropwizardMetricsReporterFactory {
-    override fun getName(): String = "logger"
+    override val name = "logger"
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
-        LOGGER.info("Creating Reporter factory for <{}>", getName())
+        LOGGER.info("Creating Reporter factory for <$name>")
 
-        val reporter = Slf4jReporter.forRegistry(registry)
-        reporter.buildWith(config.getTimeUnit("rateUnit"), { v -> reporter.convertRatesTo(v) })
-                .buildWith(config.getTimeUnit("durationUnit"), { v -> reporter.convertDurationsTo(v) })
-                .buildWith(config.getLogLevel("loggingLevel"), { v -> reporter.withLoggingLevel(v) })
-
-        return reporter.build()
+        return Slf4jReporter.forRegistry(registry).apply {
+                    config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
+                    config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
+                    config.getLogLevel("loggingLevel").let { withLoggingLevel(it) }
+                }
+                .build()
     }
 
-    private fun <T> Slf4jReporter.Builder.buildWith(e: T?, build: (e: T) -> Unit): Slf4jReporter.Builder {
-        e?.let(build)
-        return this
-    }
-
-    fun JsonObject.getLogLevel(key: String): Slf4jReporter.LoggingLevel? {
-        return getString(key)?.let {
+    fun JsonObject.getLogLevel(key: String)= getString(key)?.let {
             try {
-                return Slf4jReporter.LoggingLevel.valueOf(it.toUpperCase())
+                Slf4jReporter.LoggingLevel.valueOf(it.toUpperCase())
             } catch (e: Exception) {
                 LOGGER.error("Problem with parsing value '$it'")
+                null
             }
-            return null
         }
-    }
 
     companion object Options {
         val LOGGER: Logger = LoggerFactory.getLogger(DropwizardLoggerMetricsReporterFactory::class.java)

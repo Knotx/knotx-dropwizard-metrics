@@ -23,21 +23,15 @@ import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
 
 class DropwizardConsoleMetricsReporterFactory : DropwizardMetricsReporterFactory {
-    override fun getName(): String = "console"
+    override val name = "console"
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
-        LOGGER.info("Creating Reporter factory for <{}>", getName())
-
-        val reporter = ConsoleReporter.forRegistry(registry)
-        reporter.buildWith(config.getTimeUnit("rateUnit"), { v -> reporter.convertRatesTo(v) })
-                .buildWith(config.getTimeUnit("durationUnit"), { v -> reporter.convertDurationsTo(v) })
-
-        return reporter.build()
-    }
-
-    private fun <T> ConsoleReporter.Builder.buildWith(e: T?, build: (e: T) -> Unit): ConsoleReporter.Builder {
-        e?.let(build)
-        return this
+        LOGGER.info("Creating Reporter factory for <$name>")
+        return ConsoleReporter.forRegistry(registry).apply {
+                    config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
+                    config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
+                }
+                .build()
     }
 
     companion object Options {

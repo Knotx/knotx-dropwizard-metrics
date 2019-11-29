@@ -27,28 +27,28 @@ interface DropwizardMetricsReporterFactory {
      * The reporter name that is used in operations configuration.
      * @return the reporter name
      */
-    fun getName(): String?
+    val name: String
 
     /**
-     * Creates metrics reporter instance.
+     * Creates metrics reporter instance. Reporters are implementations of Dropwizard's ScheduledReporter
+     * provided via the SPI using Factory that implements this interface. Reporters are used by the
+     * DropwizardMetricsVerticle in order to send metrics gathered by the Dropwizard Registry.
      * @param registry reporter registry
      * @param config reporter configuration
      * @return reporter instance
      */
     fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter
 
-    companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(DropwizardMetricsReporterFactory::class.java)
+    fun JsonObject.getTimeUnit(key: String) = getString(key)?.let {
+        try {
+            TimeUnit.valueOf(it.toUpperCase())
+        } catch (e: Exception) {
+            LOGGER.error("Problem with parsing value '$it' to TimeUnit class")
+            null
+        }
     }
 
-    fun JsonObject.getTimeUnit(key: String): TimeUnit? {
-        return getString(key)?.let {
-            try {
-                return TimeUnit.valueOf(it.toUpperCase())
-            } catch (e: Exception) {
-                LOGGER.error("Problem with parsing value '$it' to TimeUnit class")
-            }
-            return null
-        }
+    companion object {
+        private val LOGGER: Logger = LoggerFactory.getLogger(DropwizardMetricsReporterFactory::class.java)
     }
 }
