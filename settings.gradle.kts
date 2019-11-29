@@ -14,3 +14,13 @@
  * limitations under the License.
  */
 rootProject.name = "knotx-dropwizard-metrics"
+
+include("knotx-dropwizard-core")
+include("knotx-dropwizard-api")
+include("knotx-dropwizard-reporter-console")
+include("knotx-dropwizard-reporter-logger")
+project(":knotx-dropwizard-core").projectDir = file("core")
+project(":knotx-dropwizard-api").projectDir = file("api")
+project(":knotx-dropwizard-reporter-console").projectDir = file("reporter/console")
+project(":knotx-dropwizard-reporter-logger").projectDir = file("reporter/logger")
+
