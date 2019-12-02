@@ -48,7 +48,7 @@ class DropwizardMetricsVerticle() : AbstractVerticle() {
         val dropwizardRegistry = SharedMetricRegistries.getOrCreate(registryName ?: DEFAULLT_REGISTRY_NAME)
 
         val factory = ServiceLoader.load(DropwizardMetricsReporterFactory::class.java)
-                .firstOrNull { f -> options.reporter.name == f?.name }
+                .firstOrNull { f -> options.reporter.name == f.name }
 
         if (factory != null) {
             reporter = factory.create(dropwizardRegistry, options.reporter.config)

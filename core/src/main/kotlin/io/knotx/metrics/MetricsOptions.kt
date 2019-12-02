@@ -28,7 +28,7 @@ data class MetricsOptions(
 }
 
 data class ReporterOptions(
-        val name: String? = null,
+        val name: String = "",
         val config: JsonObject = JsonObject()
 ) {
     constructor(config: JsonObject) : this(

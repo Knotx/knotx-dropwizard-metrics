@@ -44,7 +44,10 @@ tasks {
     named<RatTask>("rat") {
         excludes.addAll("*.md", "**/*.md", "**/build/*", "**/out/*")
     }
-    getByName("build").dependsOn("rat")
+
+    named("build") {
+        dependsOn("rat")
+    }
 }
 
 publishing {
