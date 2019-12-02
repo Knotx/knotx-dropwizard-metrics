@@ -15,27 +15,31 @@
  */
 package io.knotx.metrics.reporter
 
-import com.codahale.metrics.ConsoleReporter
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.ScheduledReporter
+import com.codahale.metrics.graphite.Graphite
+import com.codahale.metrics.graphite.GraphiteReporter
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
+import java.net.InetSocketAddress
 
-class DropwizardConsoleMetricsReporterFactory : DropwizardMetricsReporterFactory {
-    override val name = "console"
+class DropwizardGraphiteMetricsReporterFactory : DropwizardMetricsReporterFactory {
+    override val name = "graphite"
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
-        LOGGER.info("Creating Reporter factory for <$name>")
-        return ConsoleReporter.forRegistry(registry).apply {
+        val graphiteOptions = GraphiteOptions(config.getJsonObject("graphite"))
+        LOGGER.info("Creating Reporter factory for <$name> using: $graphiteOptions")
+
+        return GraphiteReporter.forRegistry(registry).apply {
                     config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
                     config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
                 }
-                .build()
+                .build(Graphite(InetSocketAddress(graphiteOptions.address, graphiteOptions.port)))
     }
 
     companion object Options {
-        val LOGGER: Logger = LoggerFactory.getLogger(DropwizardConsoleMetricsReporterFactory::class.java)
+        val LOGGER: Logger = LoggerFactory.getLogger(DropwizardGraphiteMetricsReporterFactory::class.java)
     }
 
 }

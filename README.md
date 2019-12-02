@@ -2,6 +2,23 @@
 This simple Knot.x module sends [Vert.x Dropwizard metrics](https://github.com/vert-x3/vertx-dropwizard-metrics/blob/master/src/main/asciidoc/java/index.adoc) 
 gathered by already registered Dropwizard Registry to the chosen [Reporter](#reporters).
 
+- [How does it work](#how-does-it-work)
+- [How to use](#how-to-use)
+  * [Prerequisites](#prerequisites)
+  * [Configuration](#configuration)
+  * [Running](#running)
+- [Dropwizard metrics tuning](#dropwizard-metrics-tuning)
+  * [Metrics Options](#metrics-options)
+    + [Monitoring EventBus handlers](#monitoring-eventbus-handlers)
+    + [Monitoring Http Server uris](#monitoring-http-server-uris)
+    + [Monitoring Http Cilent uris](#monitoring-http-cilent-uris)
+    + [Monitoring Http Cilent endpoints](#monitoring-http-cilent-endpoints)
+- [Reporters](#reporters)
+  * [Console](#console)
+  * [Logger](#logger)
+  * [Graphite](#graphite)
+- [Creating a custom Reporter](#creating-a-custom-reporter)
+
 ## How does it work
 This module uses the [Vert.x Dropwizard Metrics](https://vertx.io/docs/vertx-dropwizard-metrics/java)
 that implements the Vert.x Metrics Service Provider Interface (SPI) reporting metrics to the 
@@ -181,7 +198,9 @@ find the implementations delivered with this project.
 Uses [`ConsoleReporter`](https://metrics.dropwizard.io/3.1.0/manual/core/#console) which periodically 
 reports all registered metrics to the console.
 
-#### Configuration
+To use this reporter set: `reporter.name = console`. 
+
+**Configuration**
 - `rateUnit` - string representation of the `java.util.concurrent.TimeUnit` value, rates will be 
 converted to the given time unit (default `SECONDS`)
 - `durationUnit` - string representation of the `java.util.concurrent.TimeUnit` value, durations 
@@ -191,7 +210,9 @@ will be converted to the given time unit (default `MILLISECONDS`)
 Uses [`Slf4jReporter`](https://metrics.dropwizard.io/3.1.0/manual/core/#slf4j) which periodically 
 logs metrics to the `metrics` logger (you need to define that logger).
 
-#### Configuration
+To use this reporter set: `reporter.name = logger`. 
+
+**Configuration**
 - `rateUnit` - string representation of the `java.util.concurrent.TimeUnit` value, rates will be 
 converted to the given time unit (default `SECONDS`)
 - `durationUnit` - string representation of the `java.util.concurrent.TimeUnit` value, durations 
@@ -199,7 +220,25 @@ will be converted to the given time unit (default `MILLISECONDS`)
 - `loggingLevel` - logging level used when reporting (default `INFO`)
 
 ### Graphite
-> In progress....
+Uses [`GraphiteReporter`](https://metrics.dropwizard.io/3.1.0/manual/graphite/#manual-graphite)
+which periodically sends metrics to the backend server using Graphite Protocol (it is supported by
+various back-ends like [Carbon](https://github.com/graphite-project/carbon) or 
+[InfuxDb](https://docs.influxdata.com/influxdb/v1.7/supported_protocols/graphite/)).
+
+To use this reporter set: `reporter.name = graphite`. 
+
+**Prerequisites**
+You need a running Graphite back-end where metrics can be sent.
+The easiest way to setup one would be docker:
+- [Graphite image](https://hub.docker.com/r/graphiteapp/docker-graphite-statsd),
+- [InfluxDb image](https://hub.docker.com/_/influxdb/).
+
+**Configuration**
+- `rateUnit` - string representation of the `java.util.concurrent.TimeUnit` value, rates will be 
+converted to the given time unit (default `SECONDS`)
+- `durationUnit` - string representation of the `java.util.concurrent.TimeUnit` value, durations 
+will be converted to the given time unit (default `MILLISECONDS`)
+- `graphite` - JsonObject with `address` and `port` pointing to graphite back-end. 
 
 ## Creating a custom Reporter
 To create a new Reporter available via SPI follow these instructions:
