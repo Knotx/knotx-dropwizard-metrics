@@ -238,6 +238,7 @@ The easiest way to setup one would be docker:
 converted to the given time unit (default `SECONDS`)
 - `durationUnit` - string representation of the `java.util.concurrent.TimeUnit` value, durations 
 will be converted to the given time unit (default `MILLISECONDS`)
+- `prefix` - prefix all metric names with the given string
 - `graphite` - JsonObject with `address` and `port` pointing to graphite back-end. 
 
 ## Creating a custom Reporter

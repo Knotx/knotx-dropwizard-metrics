@@ -27,7 +27,8 @@ class DropwizardConsoleMetricsReporterFactory : DropwizardMetricsReporterFactory
     override val name = "console"
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
-        LOGGER.info("Creating Reporter factory for <$name>")
+        LOGGER.info("Creating <$name> dropwizard metrics reporter")
+
         return ConsoleReporter.forRegistry(registry).apply {
                     config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
                     config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }

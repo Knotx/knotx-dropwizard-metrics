@@ -27,7 +27,7 @@ class DropwizardLoggerMetricsReporterFactory : DropwizardMetricsReporterFactory 
     override val name = "logger"
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
-        LOGGER.info("Creating Reporter factory for <$name>")
+        LOGGER.info("Creating <$name> dropwizard metrics reporter")
 
         return Slf4jReporter.forRegistry(registry).apply {
                     config.getTimeUnit("rateUnit").let { convertRatesTo(it) }

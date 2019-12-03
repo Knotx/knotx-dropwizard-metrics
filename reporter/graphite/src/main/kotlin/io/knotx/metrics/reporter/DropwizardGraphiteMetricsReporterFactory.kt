@@ -30,11 +30,12 @@ class DropwizardGraphiteMetricsReporterFactory : DropwizardMetricsReporterFactor
 
     override fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter {
         val graphiteOptions = GraphiteOptions(config.getJsonObject("graphite"))
-        LOGGER.info("Creating Reporter factory for <$name> using: $graphiteOptions")
+        LOGGER.info("Creating <$name> dropwizard metrics reporter using: $graphiteOptions")
 
         return GraphiteReporter.forRegistry(registry).apply {
                     config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
                     config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
+                    config.getString("prefix").let { prefixedWith(it) }
                 }
                 .build(Graphite(InetSocketAddress(graphiteOptions.address, graphiteOptions.port)))
     }
