@@ -30,9 +30,9 @@ class DropwizardLoggerMetricsReporterFactory : DropwizardMetricsReporterFactory 
         LOGGER.info("Creating <$name> dropwizard metrics reporter")
 
         return Slf4jReporter.forRegistry(registry).apply {
-                    config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
-                    config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
-                    config.getLogLevel("loggingLevel").let { withLoggingLevel(it) }
+                    config.getTimeUnit("rateUnit")?.let { convertRatesTo(it) }
+                    config.getTimeUnit("durationUnit")?.let { convertDurationsTo(it) }
+                    config.getLogLevel("loggingLevel")?.let { withLoggingLevel(it) }
                 }
                 .build()
     }

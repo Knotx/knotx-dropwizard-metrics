@@ -33,9 +33,9 @@ class DropwizardGraphiteMetricsReporterFactory : DropwizardMetricsReporterFactor
         LOGGER.info("Creating <$name> dropwizard metrics reporter using: $graphiteOptions")
 
         return GraphiteReporter.forRegistry(registry).apply {
-                    config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
-                    config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
-                    config.getString("prefix").let { prefixedWith(it) }
+                    config.getTimeUnit("rateUnit")?.let { convertRatesTo(it) }
+                    config.getTimeUnit("durationUnit")?.let { convertDurationsTo(it) }
+                    config.getString("prefix")?.let { prefixedWith(it) }
                 }
                 .build(Graphite(InetSocketAddress(graphiteOptions.address, graphiteOptions.port)))
     }

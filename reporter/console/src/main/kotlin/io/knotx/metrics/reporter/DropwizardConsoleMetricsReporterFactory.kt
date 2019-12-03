@@ -30,8 +30,8 @@ class DropwizardConsoleMetricsReporterFactory : DropwizardMetricsReporterFactory
         LOGGER.info("Creating <$name> dropwizard metrics reporter")
 
         return ConsoleReporter.forRegistry(registry).apply {
-                    config.getTimeUnit("rateUnit").let { convertRatesTo(it) }
-                    config.getTimeUnit("durationUnit").let { convertDurationsTo(it) }
+                    config.getTimeUnit("rateUnit")?.let { convertRatesTo(it) }
+                    config.getTimeUnit("durationUnit")?.let { convertDurationsTo(it) }
                 }
                 .build()
     }
