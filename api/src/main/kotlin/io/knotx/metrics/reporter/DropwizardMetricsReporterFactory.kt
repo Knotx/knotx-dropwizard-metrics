@@ -18,9 +18,6 @@ package io.knotx.metrics.reporter
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.ScheduledReporter
 import io.vertx.core.json.JsonObject
-import io.vertx.core.logging.Logger
-import io.vertx.core.logging.LoggerFactory
-import java.util.concurrent.TimeUnit
 
 interface DropwizardMetricsReporterFactory {
     /**
@@ -38,17 +35,4 @@ interface DropwizardMetricsReporterFactory {
      * @return reporter instance
      */
     fun create(registry: MetricRegistry, config: JsonObject): ScheduledReporter
-
-    fun JsonObject.getTimeUnit(key: String) = getString(key)?.let {
-        try {
-            TimeUnit.valueOf(it.toUpperCase())
-        } catch (e: Exception) {
-            LOGGER.error("Problem with parsing value '$it' to TimeUnit class")
-            null
-        }
-    }
-
-    companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(DropwizardMetricsReporterFactory::class.java)
-    }
 }

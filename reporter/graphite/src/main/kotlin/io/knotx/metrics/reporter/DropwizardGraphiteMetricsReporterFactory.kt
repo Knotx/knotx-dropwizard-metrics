@@ -19,6 +19,7 @@ import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.ScheduledReporter
 import com.codahale.metrics.graphite.Graphite
 import com.codahale.metrics.graphite.GraphiteReporter
+import io.knotx.metrics.getTimeUnit
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory

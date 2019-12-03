@@ -32,6 +32,7 @@ dependencies {
     implementation(group = "io.vertx", name = "vertx-dropwizard-metrics")
 
     api(project(":knotx-dropwizard-api"))
+    api(project(":knotx-dropwizard-reporter-common"))
 }
 
 tasks {

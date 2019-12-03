@@ -26,14 +26,9 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-
-    implementation(platform("io.knotx:knotx-dependencies:2.0.0"))
+    
+    implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
     implementation(group = "io.vertx", name = "vertx-core")
-    implementation(group = "io.vertx", name = "vertx-dropwizard-metrics")
-    implementation(group = "io.dropwizard.metrics", name = "metrics-graphite", version = "4.0.2")
-
-    api(project(":knotx-dropwizard-api"))
-    api(project(":knotx-dropwizard-reporter-common"))
 }
 
 tasks {
