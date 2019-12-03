@@ -18,6 +18,7 @@ package io.knotx.metrics.reporter
 import com.codahale.metrics.ConsoleReporter
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics.ScheduledReporter
+import io.knotx.metrics.getTimeUnit
 import io.vertx.core.json.JsonObject
 import io.vertx.core.logging.Logger
 import io.vertx.core.logging.LoggerFactory
