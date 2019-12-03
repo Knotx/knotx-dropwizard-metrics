@@ -27,7 +27,7 @@ plugins {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation(platform("io.knotx:knotx-dependencies:2.0.0"))
+    implementation(platform("io.knotx:knotx-dependencies:${project.version}"))
     implementation(group = "io.vertx", name = "vertx-core")
     implementation(group = "io.vertx", name = "vertx-dropwizard-metrics")
 
